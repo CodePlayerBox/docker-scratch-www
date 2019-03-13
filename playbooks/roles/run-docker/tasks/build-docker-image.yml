@@ -1,0 +1,8 @@
+- name: build docker image
+  command: docker-compose build
+  args:
+    chdir:  ~/CodePlayerBox/docker-scratch-www
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+

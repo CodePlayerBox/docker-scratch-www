@@ -1,0 +1,6 @@
+version: '3'
+
+services:
+  docker-scratch-www:
+    image: "docker-scratch-www"
+    build: .

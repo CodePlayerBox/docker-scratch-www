@@ -1,0 +1,113 @@
+#
+# npm config set prefix ~/.npm
+#
+
+
+#
+# Build scratch-vm
+#
+
+- name: Install packages based on package.json.
+  local_action:
+    module: shell npm install
+    chdir: ../code/scratch-vm
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+- name: Build scratch-vm
+  local_action:
+    module: shell npm run build
+    chdir: ../code/scratch-vm
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+- name: Make a linkable scratch-vm module
+  local_action:
+    module: shell npm link
+    chdir: ../code/scratch-vm
+  register: command_result
+  changed_when: False
+- debug: msg="{{ command_result.stdout }}"
+
+#
+# Build scratch-gui
+#
+
+- name: Install packages based on package.json.
+  local_action:
+    module: shell npm install
+    chdir: ../code/scratch-gui
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+- name: Link with scratch-vm module
+  local_action:
+    module: shell npm link scratch-vm
+    chdir: ../code/scratch-gui
+  register: command_result
+  changed_when: False
+- debug: msg="{{ command_result.stdout }}"
+
+- name: Build scratch-gui
+  local_action:
+    module: shell BUILD_MODE=dist npm run build
+    chdir: ../code/scratch-gui
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+- name: Make a linkable scratch-gui module
+  local_action:
+    module: shell npm link
+    chdir: ../code/scratch-gui
+  register: command_result
+  changed_when: False
+- debug: msg="{{ command_result.stdout }}"
+
+
+#
+# Build scratch-www
+#
+
+- name: Install packages based on package.json.
+  local_action:
+    module: shell npm install
+    chdir: ../code/scratch-www
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+- name: Link with scratch-gui module
+  local_action:
+    module: shell npm link scratch-gui
+    chdir: ../code/scratch-www
+  register: command_result
+  changed_when: False
+- debug: msg="{{ command_result.stdout }}"
+
+- name: Build scratch-www
+  local_action:
+    module: shell PROJECT_HOST=/projects-proxy API_HOST=/api-proxy npm run build
+    chdir: ../code/scratch-www
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+#
+# Build other code
+#
+
+- name: Rollup the server
+  local_action:
+    module: shell yarn run rollup
+    chdir: ../code
+  register: command_result
+  changed_when: False
+
+#- debug: msg="{{ command_result.stdout }}"
+
+
+

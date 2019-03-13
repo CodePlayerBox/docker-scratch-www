@@ -1,0 +1,48 @@
+{
+  "name": "docker-scratch-www",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rollup": "rollup -c rollup.config.js",
+    "build": "npm run rollup && cp -f package.json dist &&  npm install --production --prefix dist",
+    "start": "nodemon src/index.js --exec babel-node",
+    "ws-ble": "DEBUG=app,ble,ws,link node ws-ble.js",
+    "ws-ble:debug": "DEBUG=app,ble,ws,link nodemon ws-ble/index.js --exec babel-node",
+    "device-manager": "DEBUG=app node device-manager.js",
+    "device-manager:debug": "DEBUG=app nodemon device-manager/index.js --exec babel-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodePlayerBox/docker-scratch-www.git"
+  },
+  "keywords": [
+    "scratch"
+  ],
+  "author": "Wenpeng Xiao <xiaowp@flamingoeda.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/CodePlayerBox/docker-scratch-www/issues"
+  },
+  "homepage": "https://github.com/CodePlayerBox/docker-scratch-www#readme",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "nodemon": "^1.18.9",
+    "rollup": "^1.1.1",
+    "rollup-plugin-auto-external": "^2.0.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
+  },
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "cookiejar": "^2.1.2",
+    "debug": "^4.1.1",
+    "express": "4.16.1",
+    "express-http-proxy": "1.1.0"
+  }
+}

@@ -1,0 +1,14 @@
+- name: Start docker image
+  command: ./scratch_www start
+  args:
+    chdir: ~/CodePlayerBox/docker-scratch-www/script
+  register: command_result
+  changed_when: False
+#- debug: msg="{{ command_result.stdout }}"
+
+- name: Check docker status
+  command: docker ps -f name=docker-scratch-www -q
+  register: command_result
+  failed_when: command_result.stdout|length < 1
+  changed_when: False
+- debug: msg="{{ command_result.stdout }}"

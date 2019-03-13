@@ -1,0 +1,46 @@
+- name: Upload docker to rpi
+  synchronize:
+    src: ../docker/
+    dest: ~/CodePlayerBox/docker-scratch-www/
+    rsync_opts:
+      - "--delete"
+      - "--exclude=.DS_Store"
+      - "--exclude=code"
+      - "--exclude=script"
+      - "--exclude=node_modules"
+
+- name: Upload code to rpi
+  synchronize:
+    src: ../code/
+    dest: ~/CodePlayerBox/docker-scratch-www/code
+    rsync_opts:
+      - "--delete"
+      - "--exclude=.DS_Store"
+      - "--exclude=node_modules"
+      - "--exclude=scratch-vm"
+      - "--exclude=scratch-gui"
+      - "--exclude=scratch-www"
+
+- name: Upload scratch-www to rpi
+  synchronize:
+    src: ../code/scratch-www/build/
+    dest: ~/CodePlayerBox/docker-scratch-www/code/scratch-www/build/
+    rsync_opts:
+      - "--delete"
+      - "--exclude=.DS_Store"
+      - "--exclude=node_modules"
+      - "--exclude=dist"
+
+- name: Upload script to rpi
+  synchronize:
+    src: ../script/
+    dest: ~/CodePlayerBox/docker-scratch-www/script
+    rsync_opts:
+      - "--delete"
+      - "--exclude=.DS_Store"
+
+- name: Install all packages
+  yarn:
+    path: ~/CodePlayerBox/docker-scratch-www/code
+    production: True
+

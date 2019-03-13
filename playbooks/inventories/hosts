@@ -1,0 +1,5 @@
+rpi ansible_host=raspberrypi.local ansible_user=pi
+
+[local]
+localhost ansible_connection=local
+

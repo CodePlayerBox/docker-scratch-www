@@ -1,0 +1,2 @@
+- include: build-docker-image.yml
+- include: run-docker-image.yml
