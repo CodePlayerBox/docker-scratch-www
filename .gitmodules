@@ -1,0 +1,9 @@
+[submodule "code/scratch-vm"]
+	path = code/scratch-vm
+	url = https://github.com/LLK/scratch-vm
+[submodule "code/scratch-gui"]
+	path = code/scratch-gui
+	url = https://github.com/LLK/scratch-gui
+[submodule "code/scratch-www"]
+	path = code/scratch-www
+	url = https://github.com/LLK/scratch-www.git
