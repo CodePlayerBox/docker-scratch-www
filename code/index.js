@@ -21,6 +21,11 @@ routes.forEach(route => {
 
 app.use('/', express.static(__dirname + '/scratch-www/build'));
 
+app.get('/', function(req, res) {
+  res.redirect('/projects/editor');
+});
+
+
 //app.get('/projects/editor', function(req, res) {
   //res.redirect('/projects/editor');
 //  res.send("nonono");
@@ -61,20 +66,12 @@ var mainProxy = proxy('scratch.mit.edu', {
   },
 
   proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
-    // console.log(proxyReqOpts);
-    // console.log(srcReq);
-    //console.log(proxyReqOpts.headers['referer']);
     proxyReqOpts.headers['referer'] = 'https://scratch.mit.edu/projects/editor/?tutorial=getStarted';
-    //proxyReqOpts.headers['cookie'] = '_ga=GA1.3.56049463.1551923197; _gid=GA1.3.1267038613.1551923197; scratchcsrftoken=BC1zZfGtcgBAfbc9MfOIdQsSFIfEVZe0; permissions=%7B%7D';
     proxyReqOpts.headers['x-requested-with'] = 'XMLHttpRequest';
-
     return proxyReqOpts;
   },
 
   userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
-    //
-    //console.log(proxyReq);
-    //console.log(headers);
     const setCookieHeaders = proxyRes.headers['set-cookie'] || []
     let modifiedSetCookieHeaders = setCookieHeaders
       .map(str => new cookiejar.Cookie(str))
@@ -82,25 +79,16 @@ var mainProxy = proxy('scratch.mit.edu', {
         if (cookie.path && cookie.path[0] === '/') {
           cookie.path = `/api${cookie.path}`
         }
-    //console.log(cookie);
-    cookie.domain = undefined;
-    cookie.explicit_domain = false;
-    cookie.secure = false;
-    cookie.path = '/';
-    cookie.explicit_path = true;
+        cookie.domain = undefined;
+        cookie.explicit_domain = false;
+        cookie.secure = false;
+        cookie.path = '/';
+        cookie.explicit_path = true;
         return cookie
       })
-      .map(cookie => cookie.toString())
-    modifiedSetCookieHeaders.push('abcd=123');
-    //console.log(modifiedSetCookieHeaders);
-    //modifiedSetCookieHeaders=['a=3'];
+      .map(cookie => cookie.toString());
 
     headers['set-cookie'] = modifiedSetCookieHeaders;
-    //headers['set-cookie'] = 'a=3';
-    //headers['set-cookiea'] = 'ab=3';
-    //headers['set-cookiea'] = 'ab=3';
-    //headers['set-cookie'] = 'd=3';
-
     headers['Access-Control-Allow-Origin'] = '*';
     //headers['Access-Control-Allow-Credentials'] = 'true';
     return headers;
@@ -118,18 +106,12 @@ var projectsProxy = proxy('projects.scratch.mit.edu', {
   changeOrigin: true,
 
   proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
-    // console.log(proxyReqOpts);
-    // console.log(srcReq);
-    console.log(proxyReqOpts.headers['referer']);
     proxyReqOpts.headers['referer'] = 'https://scratch.mit.edu/projects/editor/?tutorial=getStarted';
-    //proxyReqOpts.headers['cookie'] = '_ga=GA1.3.56049463.1551923197; _gid=GA1.3.1267038613.1551923197; scratchcsrftoken=BC1zZfGtcgBAfbc9MfOIdQsSFIfEVZe0; permissions=%7B%7D';
-    //proxyReqOpts.headers['x-requested-with'] = 'XMLHttpRequest';
     proxyReqOpts.headers['Content-Type'] = 'application/json';
 
     return proxyReqOpts;
   }
 });
-
 app.use('/projects-proxy', projectsProxy);
 
 
@@ -137,27 +119,14 @@ var apiProxy = proxy('api.scratch.mit.edu', {
   https: true,
   changeOrigin: true,
 
-  //proxyReqPathResolver: function(req, res) {
-  //  console.log(req.originalUrl)
-  //  return req.originalUrl.replace(/\/api-proxy/, '');
-  //},
-
-
   proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
-    // console.log(proxyReqOpts);
-    // console.log(srcReq);
-    console.log(proxyReqOpts.headers['referer']);
     proxyReqOpts.headers['referer'] = 'https://scratch.mit.edu/projects/editor/?tutorial=getStarted';
-    //proxyReqOpts.headers['cookie'] = '_ga=GA1.3.56049463.1551923197; _gid=GA1.3.1267038613.1551923197; scratchcsrftoken=BC1zZfGtcgBAfbc9MfOIdQsSFIfEVZe0; permissions=%7B%7D';
-    //proxyReqOpts.headers['x-requested-with'] = 'XMLHttpRequest';
     proxyReqOpts.headers['Content-Type'] = 'application/json';
 
     return proxyReqOpts;
   }
 });
-
 app.use('/api-proxy', apiProxy);
-
 
 
 // Start listening
